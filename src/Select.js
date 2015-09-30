@@ -678,6 +678,7 @@ var Select = React.createClass({
 	},
 
 	createNewOption: function() {
+		var inputValue = this.state.inputValue;
 		return this.props.newOptionCreator ? this.props.newOptionCreator(inputValue) : {
 			value: inputValue,
 			label: inputValue,
@@ -696,7 +697,6 @@ var Select = React.createClass({
 		// Add the current value to the filtered options in last resort
 		var options = this.state.filteredOptions;
 		if (this.props.allowCreate && this.state.inputValue.trim()) {
-			var inputValue = this.state.inputValue;
 			options = options.slice();
 			options.unshift(this.createNewOption());
 		}
