@@ -609,7 +609,7 @@ var Select = React.createClass({
 
 	selectFocusedOption: function() {
 		if (this.props.allowCreate && !this.state.focusedOption) {
-			return this.selectValue(this.state.inputValue);
+			return this.selectValue(this.createNewOption());
 		}
 
 		if (this.state.focusedOption) {
@@ -677,6 +677,14 @@ var Select = React.createClass({
 		}
 	},
 
+	createNewOption: function() {
+		return this.props.newOptionCreator ? this.props.newOptionCreator(inputValue) : {
+			value: inputValue,
+			label: inputValue,
+			create: true
+		};
+	},
+
 	buildMenu: function() {
 		var focusedValue = this.state.focusedOption ? this.state.focusedOption.value : null;
 		var renderLabel = this.props.optionRenderer || function(op) {
@@ -690,12 +698,7 @@ var Select = React.createClass({
 		if (this.props.allowCreate && this.state.inputValue.trim()) {
 			var inputValue = this.state.inputValue;
 			options = options.slice();
-			var newOption = this.props.newOptionCreator ? this.props.newOptionCreator(inputValue) : {
-				value: inputValue,
-				label: inputValue,
-				create: true
-			};
-			options.unshift(newOption);
+			options.unshift(this.createNewOption());
 		}
 		var ops = Object.keys(options).map(function(key) {
 			var op = options[key];
