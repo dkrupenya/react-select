@@ -550,6 +550,8 @@ var Select = React.createClass({
 		}
 
 		if (this.state.isFocused) {
+			if (this.props.multi && ~event.target.className.indexOf('Select-option')) return;
+
 			this.setState({
 				isOpen: true
 			}, this._bindCloseMenuIfClickedOutside);
