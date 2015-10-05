@@ -707,14 +707,15 @@ var Select = React.createClass({
 	},
 
 	autoloadAsyncOptions: function autoloadAsyncOptions() {
-		var _this5 = this;
-
 		this.setState({
 			isLoading: true
-		});
-		this.loadAsyncOptions(this.props.value || '', { isLoading: false }, function () {
-			// update with fetched but don't focus
-			_this5.setValue(_this5.props.value, false);
+		}, function () {
+			var _this5 = this;
+
+			this.loadAsyncOptions(this.props.value || '', { isLoading: false }, function () {
+				// update with fetched but don't focus
+				_this5.setValue(_this5.props.value, false);
+			});
 		});
 	},
 
