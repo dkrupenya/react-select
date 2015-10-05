@@ -524,10 +524,11 @@ var Select = React.createClass({
 	autoloadAsyncOptions: function() {
 		this.setState({
 			isLoading: true
-		});
-		this.loadAsyncOptions((this.props.value || ''), { isLoading: false }, () => {
-			// update with fetched but don't focus
-			this.setValue(this.props.value, false);
+		}, function() {
+			this.loadAsyncOptions((this.props.value || ''), { isLoading: false }, () => {
+				// update with fetched but don't focus
+				this.setValue(this.props.value, false);
+			});
 		});
 	},
 
