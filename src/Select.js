@@ -52,6 +52,7 @@ var Select = React.createClass({
 		searchingText: React.PropTypes.string,     // message to display whilst options are loading via asyncOptions
 		searchPromptText: React.PropTypes.string,  // label to prompt for search input
 		singleValueComponent: React.PropTypes.func,// single value component when multiple is set to false
+		trimSpaces: React.PropTypes.bool,          // whether to trim leading and trailing spaces in input field
 		value: React.PropTypes.any,                // initial field value
 		valueComponent: React.PropTypes.func,      // value component to render in multiple mode
 		valueRenderer: React.PropTypes.func        // valueRenderer: function(option) {}
@@ -89,6 +90,7 @@ var Select = React.createClass({
 			searchingText: 'Searching...',
 			searchPromptText: 'Type to search',
 			singleValueComponent: SingleValue,
+			trimSpaces: false,
 			value: undefined,
 			valueComponent: Value
 		};
@@ -495,18 +497,20 @@ var Select = React.createClass({
 	handleInputChange: function(event) {
 		// assign an internal variable because we need to use
 		// the latest value before setState() has completed.
-		this._optionsFilterString = event.target.value;
+
+		var value = this.props.trimSpaces ? event.target.value.trim() : event.target.value;
+		this._optionsFilterString = value;
 
 		if (this.props.onInputChange) {
-			this.props.onInputChange(event.target.value);
+			this.props.onInputChange(value);
 		}
 
 		if (this.props.asyncOptions) {
 			this.setState({
 				isLoading: true,
-				inputValue: event.target.value
+				inputValue: value
 			});
-			this.loadAsyncOptions(event.target.value, {
+			this.loadAsyncOptions(value, {
 				isLoading: false,
 				isOpen: true
 			}, this._bindCloseMenuIfClickedOutside);
@@ -514,7 +518,7 @@ var Select = React.createClass({
 			var filteredOptions = this.filterOptions(this.state.options);
 			this.setState({
 				isOpen: true,
-				inputValue: event.target.value,
+				inputValue: value,
 				filteredOptions: filteredOptions,
 				focusedOption: this._getNewFocusedOption(filteredOptions)
 			}, this._bindCloseMenuIfClickedOutside);
